@@ -1,174 +1,220 @@
-# InterviewAI - AI-Powered Interview Simulator
+<div align="center">
 
-> **“Practice. Perform. Improve.”**  
-> A Production-Quality Full-Stack Engineering Placement Preparation Platform.  
-> *Final-Year B.Tech Information Technology Project.*
+# 🎙️ InterviewAI – AI-Powered Personal Interview Coach
+### *“Practice. Perform. Improve.”*
+
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![CI Pipeline](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/UnnatiJain09/interview-ai/actions)
+[![React](https://img.shields.io/badge/React-18.3.1-61DAFB?logo=react&logoColor=black)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-v20+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![Express.js](https://img.shields.io/badge/Express-4.21-000000?logo=express&logoColor=white)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose_8-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o_%7C_Whisper-412991?logo=openai&logoColor=white)](https://openai.com/)
+
+**A full-stack, Generative AI interview preparation platform designed for software engineering placements, technical assessments, and HR behavioral rounds.**
+
+[Live Demo](http://localhost:5173) • [Documentation](#-table-of-contents) • [Report Bug](https://github.com/UnnatiJain09/interview-ai/issues) • [Request Feature](https://github.com/UnnatiJain09/interview-ai/issues)
+
+</div>
 
 ---
 
-## 1. Project Overview
+## 📑 Table of Contents
+1. [Executive Summary](#-executive-summary)
+2. [Key Features](#-key-features)
+3. [System Architecture & Workflow](#-system-architecture--workflow)
+4. [Technology Stack](#-technology-stack)
+5. [Database Models (Mongoose)](#-database-models-mongoose)
+6. [REST API Specification](#-rest-api-specification)
+7. [AI Evaluation Rubrics & Metrics](#-ai-evaluation-rubrics--metrics)
+8. [Installation & Local Setup](#-installation--local-setup)
+9. [Project Directory Structure](#-project-directory-structure)
+10. [Author & Acknowledgments](#-author--acknowledgments)
 
-**InterviewAI** is an advanced, end-to-end full-stack web application designed to prepare engineering students and software professionals for high-stakes technical, HR, and coding interviews.
+---
 
-Unlike static quiz portals or basic chatbot interfaces, InterviewAI acts as an **interactive, dynamic AI interviewer** with real-time speech recognition, contextual follow-up questioning, automated code execution in isolated sandboxes, multi-dimensional answer scoring, and longitudinal performance analytics.
+## 🌟 Executive Summary
+
+**InterviewAI** is an advanced, production-quality interview preparation simulator developed as a final-year B.Tech Information Technology capstone project. 
+
+Unlike conventional static question repositories or basic generic chatbots, **InterviewAI** acts as an **interactive, intelligent hiring manager**:
+- 🗣️ **Real-time Speech Recognition**: Candidates can speak answers naturally via microphone (powered by OpenAI Whisper STT and browser Web Speech fallback).
+- 🔊 **Voice Synthesis & AI Avatar**: Contextual question delivery with animated visual feedback and text-to-speech audio playback.
+- 🎯 **Dynamic Adaptive Probing**: Automatically detects gaps or interesting points in candidate answers and generates contextual follow-up questions.
+- 💻 **In-Browser Coding Assessment**: Integrated Monaco Editor (VS Code engine) with multi-language execution, automated test case runner, and Big-O complexity evaluation.
+- 📊 **8-Dimensional Answer Evaluation**: Rigorous analysis of Technical Knowledge, Relevance, Accuracy, Completeness, Structure, Communication, Clarity, and Grammar.
+- 📈 **Longitudinal Analytics**: Competency radar charts, progress over time, strengths/weaknesses breakdown, and model ideal answers.
+
+---
+
+## ✨ Key Features
+
+| Category | Features Included |
+| :--- | :--- |
+| **Interview Modes** | • **Technical Round**: Role-tailored (Frontend, Backend, Full Stack, DevOps, AI/ML)<br>• **HR Behavioral**: STAR method, leadership, conflict resolution, cultural fit<br>• **Coding Assessment**: Algorithmic problem solving with test cases<br>• **Full Mock Simulation**: End-to-end multi-stage hiring panel |
+| **Voice & Speech** | • OpenAI Whisper API (`whisper-1`) high-fidelity audio transcription<br>• Real-time speech visualizer and audio recording timer<br>• Web Speech API speech synthesis for realistic interviewer audio |
+| **Code Sandbox** | • Monaco Editor with syntax highlighting, line numbers, and theme support<br>• Multi-language execution: JavaScript, Python, Java, C++<br>• Test case validation, runtime execution timer (ms), and Big-O complexity audits |
+| **AI Assessment Engine** | • Weighted scoring tailored by interview category<br>• Question-by-question breakdown with candidate transcript vs. model ideal answer<br>• Actionable recommendations for immediate improvement |
+| **Analytics & History** | • Recharts Radar competency graphs across 6 core engineering pillars<br>• Progression AreaChart tracking scores across multiple rounds<br>• Filterable history table with archived session reports |
+| **UX & Modern Design** | • Sleek dark & light modes with persistent localStorage storage<br>• Glassmorphism panels, radiant gradients, and micro-animations<br>• Instant demo preview mode (`demo@interviewai.com`) |
+
+---
+
+## 🏗️ System Architecture & Workflow
 
 ```
-                  ┌──────────────────────────────────────────────────┐
-                  │              InterviewAI Web Client              │
-                  │   React 18 • Tailwind CSS • Monaco • Recharts    │
-                  └────────────────────────┬─────────────────────────┘
-                                           │ REST APIs + Multipart Audio
-                                           ▼
-                  ┌──────────────────────────────────────────────────┐
-                  │            Node.js / Express REST API            │
-                  │       JWT Auth • Sandboxed Test Runner • MVC     │
-                  └───────────┬────────────┬────────────┬────────────┘
-                              │            │            │
-          ┌───────────────────┘            │            └───────────────────┐
-          ▼                                ▼                                ▼
-┌──────────────────┐             ┌──────────────────┐             ┌──────────────────┐
-│  MongoDB Atlas   │             │ OpenAI GPT-4o &  │             │ Isolated Child-  │
-│ Mongoose Schemas │             │ Whisper STT +    │             │ Process Sandbox  │
-│ Users, Sessions  │             │ Dynamic Engine   │             │ (JS/Node/Python) │
-└──────────────────┘             └──────────────────┘             └──────────────────┘
+                             ┌───────────────────────────────────┐
+                             │       InterviewAI Web Client      │
+                             │   React 18 • Vite • Tailwind CSS  │
+                             │     Monaco Editor • Recharts      │
+                             └─────────────────┬─────────────────┘
+                                               │
+                                 HTTPS / REST  │  Multipart Audio
+                                               ▼
+                             ┌───────────────────────────────────┐
+                             │     Node.js / Express Backend     │
+                             │  JWT Middleware • Multer • CORS   │
+                             └─────┬───────────┬───────────┬─────┘
+                                   │           │           │
+         ┌─────────────────────────┘           │           └─────────────────────────┐
+         ▼                                     ▼                                     ▼
+┌──────────────────┐               ┌───────────────────────┐             ┌───────────────────────┐
+│  MongoDB Atlas   │               │   AI & Speech Engine  │             │   Sandboxed Runner    │
+│ Mongoose Schemas │               │ OpenAI GPT-4o Whisper │             │ Child-Process Sandbox │
+│ Users, Sessions, │               │ Dynamic Probing & STT │             │ JS / Python / C++     │
+│ Questions, Code  │               └───────────────────────┘             └───────────────────────┘
+└──────────────────┘
 ```
 
----
-
-## 2. Problem Statement & Objectives
-
-### Problem Statement
-Traditional mock interviews are expensive, difficult to coordinate with senior engineers, and often lack objective, repeatable evaluation criteria. Conversely, static interview question repositories fail to simulate the pressure, articulation challenges, and unexpected follow-up probes inherent to real technical and behavioral hiring loops.
-
-### Key Objectives
-1. **Realistic Interview Simulation**: Replicate actual technical and HR interview rounds with speech-to-text input (OpenAI Whisper) and text-to-speech audio synthesis.
-2. **Context-Aware Dynamic Questioning**: Adapt follow-up probes dynamically based on the candidate's actual spoken responses rather than static question lists.
-3. **Multi-Metric AI Evaluation**: Analyze candidate responses across 8 dimensions: Relevance, Accuracy, Completeness, Technical Knowledge, Communication, Clarity, Structure, and Grammar.
-4. **Sandboxed Coding Assessments**: Provide an in-browser IDE (Monaco Editor) that safely executes user code against unit test cases with Big-O time and space complexity audits.
-5. **Actionable Growth Analytics**: Visualize progress with Recharts competency radars, multi-round timelines, and personalized improvement recommendations.
+### 🔄 End-to-End Interview Flow
+1. **Candidate Configures Round**: Selects category (HR / Technical / Coding / Mock), difficulty, question count, and target role.
+2. **AI Generates Opener**: Synthesizes a role-appropriate introductory technical or behavioral question.
+3. **Candidate Responds**:
+   - Spoken audio is recorded via `MediaRecorder` and transcribed using Whisper STT.
+   - Or code is written directly in the Monaco Editor and submitted against test cases.
+4. **Multi-Metric Evaluation**:
+   - The backend runs prompt engineering evaluation pipeline returning JSON scores and qualitative feedback.
+5. **Contextual Follow-Up**: If the answer warrants deeper investigation, the AI dynamically crafts an adaptive follow-up probe.
+6. **Comprehensive Scorecard**: Calculates category-weighted score, renders radar chart, highlights key strengths/weaknesses, and stores performance in MongoDB.
 
 ---
 
-## 3. Technology Stack
+## 💻 Technology Stack
 
-### Frontend
-- **Framework**: React 18 (Vite)
-- **Routing**: React Router v7
-- **Styling**: Tailwind CSS with dark/light themes, custom glassmorphism, and subtle glowing accents
-- **Code Assessment**: `@monaco-editor/react` (VS Code engine in browser)
-- **Data Visualization**: `recharts` (Area charts, Radar charts, Progression timelines)
-- **Icons**: `lucide-react`
-- **Celebration Effects**: `canvas-confetti`
-- **HTTP Client**: `axios` with automatic JWT interceptors
+### **Frontend**
+* **Core**: React 18 (Vite 6)
+* **Routing**: React Router DOM v7
+* **Styling**: Tailwind CSS (with bespoke glassmorphism and radiant glow utilities)
+* **Code Editor**: `@monaco-editor/react` (VS Code browser engine)
+* **Visualizations**: `recharts` (Responsive Area Charts, Radar Competency Graphs)
+* **Icons**: `lucide-react`
+* **Effects**: `canvas-confetti`
+* **HTTP Client**: `axios` with automatic JWT Bearer interceptors
 
-### Backend
-- **Runtime**: Node.js (v20+)
-- **Web Framework**: Express.js
-- **Database**: MongoDB & Mongoose ODM
-- **Authentication**: JSON Web Tokens (JWT) & `bcryptjs` password hashing
-- **File Handling**: `multer` with MIME-type filtering and storage limits (15MB)
-- **Security**: `express-rate-limit`, CORS configuration, parameter sanitation
+### **Backend**
+* **Runtime**: Node.js (v20+)
+* **Framework**: Express.js (MVC REST Architecture)
+* **Database**: MongoDB (Local or MongoDB Atlas) via Mongoose ODM
+* **Security & Auth**: JSON Web Tokens (JWT), `bcryptjs` password hashing, `express-rate-limit`, CORS
+* **File Uploads**: `multer` with MIME-type filtering for voice audio
 
-### AI & Speech Engine
-- **Large Language Model**: OpenAI GPT-4o / GPT-4o-mini
-- **Speech-to-Text**: OpenAI Whisper API (`whisper-1`) with fallback to browser Web Speech Recognition
-- **Text-to-Speech**: Web Speech Synthesis API for realistic interviewer audio playback
-- **Dynamic AI Simulation Engine**: Role-tailored intelligent fallback engine ensuring seamless functionality even in offline or unauthenticated environments
-
----
-
-## 4. Key Features
-
-- **Dynamic AI Interviewer**: Probes deeper with contextual follow-up questions if candidate answers suggest interesting trade-offs.
-- **Voice-Enabled Rounds**: Candidates can speak answers naturally via microphone; Whisper transcribes audio into accurate transcripts.
-- **Monaco Code Sandbox**: Multi-language support (JavaScript, Python, Java, C++) with automated test-case runner and execution time measurement.
-- **8-Metric AI Scoring**: Transparent weighted scoring breakdown:
-  - *Technical Round*: Technical Knowledge (35%) + Quality (25%) + Communication (20%) + Relevance (10%) + Fluency (10%)
-  - *HR Round*: Communication (30%) + Quality (25%) + Relevance (20%) + Clarity (15%) + Grammar (10%)
-  - *Coding Round*: Correctness (50%) + Code Quality (20%) + Time Complexity (15%) + Space Complexity (15%)
-- **Question-by-Question AI Feedback**: Detailed reviews showing candidate answer, AI strengths, weaknesses, and a suggested model ideal answer.
-- **Performance Radar & Longitudinal Analytics**: Tracks competency across 6 core engineering pillars.
-- **Instant Demo Mode**: Includes pre-seeded demo user (`demo@interviewai.com`) with completed interview histories for immediate evaluator demonstration.
+### **AI & Intelligent Fallback**
+* **LLM**: OpenAI GPT-4o & GPT-4o-mini
+* **STT**: OpenAI Whisper (`whisper-1`) + Web Speech Recognition API
+* **TTS**: Web Speech Synthesis API
+* **Dynamic Simulation Engine**: Built-in intelligent fallback engine guaranteeing zero downtime and full offline evaluation capabilities.
 
 ---
 
-## 5. Database Architecture (Mongoose Models)
+## 🗄️ Database Models (Mongoose)
 
-1. **User**:
-   - `name`, `email`, `password` (bcrypt hash), `role`, `experience`, `skills`, `preferredLanguage`, `resumeSummary`
-2. **Interview**:
-   - `userId`, `interviewType` (HR, Technical, Coding, Full Mock), `targetRole`, `difficulty`, `duration`, `questionCount`, `mode` (voice/text), `status`, `overallScore`, `technicalScore`, `communicationScore`, `codingScore`, `summaryFeedback`, `strengths`, `improvements`
-3. **Question**:
-   - `interviewId`, `question`, `type`, `difficulty`, `order`, `expectedTopics`, `followUpTo`, `codingChallenge` (title, description, examples, constraints, starterCode, testCases)
-4. **Answer**:
-   - `interviewId`, `questionId`, `userId`, `transcript`, `answerText`, `score`, `relevance`, `accuracy`, `communication`, `clarity`, `grammar`, `completeness`, `technicalKnowledge`, `strengths`, `weaknesses`, `suggestions`, `idealAnswer`
-5. **CodingSubmission**:
-   - `interviewId`, `questionId`, `userId`, `language`, `code`, `testCasesPassed`, `totalTestCases`, `executionTimeMs`, `score`, `timeComplexity`, `spaceComplexity`, `feedback`, `testResults`
-6. **Performance**:
-   - `userId`, `interviewId`, `overallScore`, `technicalScore`, `communicationScore`, `codingScore`, `createdAt`
+* **`User`**: `name`, `email`, `password` (bcrypt hash), `role`, `experience`, `skills`, `preferredLanguage`, `resumeSummary`.
+* **`Interview`**: `userId`, `interviewType` (HR, Technical, Coding, Full Mock), `targetRole`, `difficulty`, `duration`, `questionCount`, `mode`, `status`, `overallScore`, `technicalScore`, `communicationScore`, `codingScore`, `summaryFeedback`, `strengths`, `improvements`.
+* **`Question`**: `interviewId`, `question`, `type`, `difficulty`, `order`, `expectedTopics`, `followUpTo`, `codingChallenge` (title, description, examples, constraints, starterCode, testCases).
+* **`Answer`**: `interviewId`, `questionId`, `userId`, `transcript`, `answerText`, `score`, `relevance`, `accuracy`, `communication`, `clarity`, `grammar`, `completeness`, `technicalKnowledge`, `strengths`, `weaknesses`, `suggestions`, `idealAnswer`.
+* **`CodingSubmission`**: `interviewId`, `questionId`, `userId`, `language`, `code`, `testCasesPassed`, `totalTestCases`, `executionTimeMs`, `score`, `timeComplexity`, `spaceComplexity`, `feedback`, `testResults`.
+* **`Performance`**: `userId`, `interviewId`, `overallScore`, `technicalScore`, `communicationScore`, `codingScore`, `createdAt`.
 
 ---
 
-## 6. REST API Documentation
+## 🌐 REST API Specification
 
-### Authentication (`/api/auth`)
-- `POST /register`: Create new user account with role and experience
-- `POST /login`: Authenticate email and password, returns JWT token
-- `POST /demo`: Instant login as demo evaluator (`demo@interviewai.com`)
-- `GET /me`: Retrieve currently authenticated user profile
-- `POST /logout`: Terminate session
+### 🔐 Authentication (`/api/auth`)
+| Method | Endpoint | Description | Auth Required |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/auth/register` | Register new candidate with profile details | No |
+| `POST` | `/api/auth/login` | Authenticate user & issue JWT token | No |
+| `POST` | `/api/auth/demo` | Instant 1-click evaluator login (`demo@interviewai.com`) | No |
+| `GET` | `/api/auth/me` | Fetch active user session | Yes (JWT) |
+| `POST` | `/api/auth/logout` | Terminate session | Yes (JWT) |
 
-### Interviews (`/api/interviews`)
-- `POST /`: Create and configure a new interview session
-- `GET /`: List all interviews for user with optional filters
-- `GET /:id`: Retrieve interview with all questions, answers, and coding submissions
-- `POST /:id/start`: Begin session and generate initial question
-- `POST /:id/complete`: Calculate weighted scores and generate final AI summary
+### 🎙️ Interviews (`/api/interviews`)
+| Method | Endpoint | Description | Auth Required |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/interviews` | Create and initialize a new interview round | Yes (JWT) |
+| `GET` | `/api/interviews` | List all historical sessions with pagination | Yes (JWT) |
+| `GET` | `/api/interviews/:id` | Fetch session details, questions, and answers | Yes (JWT) |
+| `POST` | `/api/interviews/:id/start` | Launch session and generate first question | Yes (JWT) |
+| `POST` | `/api/interviews/:id/complete`| Finalize interview, compute overall score & summary | Yes (JWT) |
 
-### Questions & Answers (`/api/questions`)
-- `GET /interview/:id`: Retrieve all questions for a session
-- `POST /:id/answer`: Submit answer, receive 8-metric AI evaluation, and trigger follow-up question
+### ❓ Questions & Evaluation (`/api/questions`)
+| Method | Endpoint | Description | Auth Required |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/questions/interview/:id` | Get all questions assigned to a session | Yes (JWT) |
+| `POST` | `/api/questions/:id/answer` | Submit answer, get 8-metric scoring & follow-up | Yes (JWT) |
 
-### Speech (`/api/speech`)
-- `POST /transcribe`: Upload voice audio (`multipart/form-data`) for Whisper transcription
+### 💻 Coding Sandbox (`/api/coding`)
+| Method | Endpoint | Description | Auth Required |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/coding/run` | Execute code against unit tests in isolated subprocess | Yes (JWT) |
+| `POST` | `/api/coding/submit` | Evaluate code quality, test coverage, and Big-O | Yes (JWT) |
 
-### Coding (`/api/coding`)
-- `POST /run`: Execute code safely against test cases in sandboxed subprocess
-- `POST /submit`: Execute all tests, run AI code review, and compute complexity Big-O
-
-### Analytics (`/api/analytics`)
-- `GET /dashboard`: Overview metrics, recent sessions, and score progression
-- `GET /performance`: Radar chart dimensions, category breakdown, and AI insights
-- `GET /history`: Filterable and searchable historical records
+### 📊 Analytics (`/api/analytics`)
+| Method | Endpoint | Description | Auth Required |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/analytics/dashboard` | Aggregated dashboard stats & progression history | Yes (JWT) |
+| `GET` | `/api/analytics/performance` | 6-pillar radar competency breakdown & insights | Yes (JWT) |
+| `GET` | `/api/analytics/history` | Filterable archive of all completed interview logs | Yes (JWT) |
 
 ---
 
-## 7. Installation & Setup Instructions
+## 🎯 AI Evaluation Rubrics & Metrics
 
-### Prerequisites
-- **Node.js**: v18.0.0 or higher (`node -v`)
-- **npm**: v9.0.0 or higher (`npm -v`)
-- **MongoDB**: Local MongoDB instance running on `localhost:27017` or MongoDB Atlas connection string
-- **Python** *(Optional)*: Python 3 for running Python coding test cases
+The platform implements category-weighted scoring algorithms:
 
-### Step 1: Clone or Navigate to Project Directory
+### 1. Technical Interview Scoring
+$$\text{Overall Score} = 0.35(\text{Technical}) + 0.25(\text{Answer Quality}) + 0.20(\text{Communication}) + 0.10(\text{Relevance}) + 0.10(\text{Fluency})$$
+
+### 2. HR Behavioral Scoring
+$$\text{Overall Score} = 0.30(\text{Communication}) + 0.25(\text{Quality}) + 0.20(\text{Relevance}) + 0.15(\text{Clarity}) + 0.10(\text{Grammar})$$
+
+### 3. Coding Assessment Scoring
+$$\text{Overall Score} = 0.50(\text{Test Case Pass Rate}) + 0.20(\text{Code Quality}) + 0.15(\text{Time Complexity}) + 0.15(\text{Space Complexity})$$
+
+---
+
+## 🚀 Installation & Local Setup
+
+### 📋 Prerequisites
+* **Node.js**: v18.0.0 or higher (`node -v`)
+* **npm**: v9.0.0 or higher (`npm -v`)
+* **MongoDB**: Local MongoDB community service (`mongodb://localhost:27017`) or [MongoDB Atlas URI](https://www.mongodb.com/atlas)
+
+### 1. Clone the Repository
 ```bash
-cd C:\Users\hp\.gemini\antigravity-ide\scratch\interview-ai
+git clone https://github.com/UnnatiJain09/interview-ai.git
+cd interview-ai
 ```
 
-### Step 2: Install Dependencies
+### 2. Install Dependencies
 ```bash
-# Install root, server, and client dependencies
+# Install root, backend, and frontend dependencies in one command
 npm run install:all
 ```
-*Or install separately:*
-```bash
-npm install --prefix server
-npm install --prefix client
-```
 
-### Step 3: Configure Environment Variables
-Create a `.env` file inside `server/` (a sample `.env.example` is provided):
+### 3. Configure Environment Variables
+Create a `.env` file in the `server/` directory:
 ```env
 PORT=5000
 NODE_ENV=development
@@ -178,62 +224,77 @@ JWT_EXPIRES_IN=7d
 OPENAI_API_KEY=
 CLIENT_URL=http://localhost:5173
 ```
-> **Note on OpenAI API Key**: If `OPENAI_API_KEY` is provided, InterviewAI calls live OpenAI GPT-4o and Whisper models. If left blank, the application activates its **Intelligent Dynamic Simulation Engine**, allowing full offline demonstrations with zero setup barriers.
+*(Optional: Provide an `OPENAI_API_KEY` for live OpenAI GPT-4o/Whisper calls. If omitted, the platform uses its built-in offline simulation engine).*
 
-### Step 4: Populate Demo Data
-Populate the database with sample interviews, answers, and Recharts progression records:
+### 4. Seed the Database
+Populate sample users, technical rounds, behavioral interviews, and analytics:
 ```bash
 npm run seed
 ```
 
-### Step 5: Start the Full-Stack Application
+### 5. Launch the Application
 ```bash
-# Run both Backend (Port 5000) and Frontend (Port 5173) concurrently
+# Runs Express backend (Port 5000) and Vite frontend (Port 5173) concurrently
 npm run dev
 ```
 
-Open your browser and navigate to:  
-👉 **`http://localhost:5173`**
+Visit **`http://localhost:5173`** in your browser.
 
-To test instantly, click **"Instant Demo Preview"** on the landing page or login with:
-- **Email**: `demo@interviewai.com`
-- **Password**: `password123`
-
----
-
-## 8. Verification & User Flows Tested
-
-1. **Candidate Registration & Login**: Full bcrypt hashing, JWT issuance, and persistent session recovery.
-2. **Dashboard & Metrics**: Responsive area charts, average score computations, and quick-action launchers.
-3. **Interview Configuration**: Wizard configuring Category (HR/Tech/Coding/Mock), Role, Experience, Difficulty, and Duration.
-4. **Voice & Text Interview Room**:
-   - AI avatar speaking status and Web Speech Synthesis audio playback.
-   - Microphone recording with MediaRecorder and Whisper transcription.
-   - 8-metric AI answer evaluation returning score, strengths, and weaknesses.
-   - Context-aware follow-up question generation.
-5. **Monaco Coding Assessment**: Syntax-highlighted editor, test case runner executing in isolated child processes, and Big-O complexity audits.
-6. **Results & Analytics**: Confetti celebration, SVG circular score indicators, question accordion with model answers, and 6-dimension radar graphs.
+**Demo Credentials**:
+* **Email**: `demo@interviewai.com`
+* **Password**: `password123`
+*(Or click the 1-click **Demo Login** button on the sign-in page).*
 
 ---
 
-## 9. Limitations & Future Scope
+## 📁 Project Directory Structure
 
-### Current Limitations
-- Code execution for compiled languages (Java, C++) in demo environments uses clean runtime simulation unless local compiler toolchains (`javac`, `g++`) are installed on the host OS.
-- Audio transcription in environments without internet access or an OpenAI key relies on the client's Web Speech API.
-
-### Future Scope
-- Integration with WebRTC for video posture and eye-contact confidence cues.
-- Resume PDF parsing using OCR to auto-generate personalized interview questions based on uploaded CVs.
-- Multi-lingual interview practice supporting regional languages.
-- Integration with Judge0 API or Docker containers for micro-sandboxed polyglot code execution.
+```
+interview-ai/
+├── .github/
+│   └── workflows/
+│       └── ci.yml                 # Automated CI Build & Verification
+├── client/                        # React 18 Frontend
+│   ├── src/
+│   │   ├── components/            # UI, Interview & Coding widgets
+│   │   ├── context/               # AuthContext & ThemeContext
+│   │   ├── pages/                 # 13 Application Views & Routes
+│   │   ├── services/api.js        # Axios API Client with JWT
+│   │   ├── App.jsx                # Route Matrix
+│   │   └── main.jsx
+│   ├── .env.example
+│   ├── package.json
+│   └── tailwind.config.js
+├── server/                        # Node.js Express REST API
+│   ├── config/db.js               # MongoDB Mongoose connector
+│   ├── controllers/               # Auth, Interview, Question, Coding, Analytics
+│   ├── middleware/                # JWT Auth, Multer, Error Handlers
+│   ├── models/                    # Mongoose Schemas
+│   ├── prompts/                   # OpenAI GPT-4o Evaluation Prompts
+│   ├── routes/                    # Express Router Endpoints
+│   ├── services/                  # OpenAI, Whisper, Sandbox Execution
+│   ├── utils/seedData.js          # Full Database Seeder
+│   ├── .env.example
+│   ├── app.js
+│   ├── package.json
+│   └── server.js
+├── .env.example
+├── .gitignore
+├── LICENSE                        # MIT License
+├── package.json                   # Root workspace scripts
+└── README.md                      # Project documentation
+```
 
 ---
 
-## 10. Final-Year Academic Evaluation Summary
+## 👩‍💻 Author & Acknowledgments
 
-This capstone project validates foundational and advanced engineering competencies:
-- **Full-Stack Development**: Modular MVC REST architecture with React 18, Express, and MongoDB.
-- **Generative AI & Speech**: Prompt engineering, structured JSON validation, and Whisper speech recognition.
-- **Security Engineering**: Password hashing with bcrypt, JWT authorization middleware, and isolated child-process sandboxes avoiding `eval()`.
-- **UI/UX Design**: Responsive typography, dark/light themes, and Recharts analytics.
+* **Developer**: **Unnati Jain** ([@UnnatiJain09](https://github.com/UnnatiJain09))
+* **Project**: Final-Year B.Tech Information Technology Capstone Project
+* **Special Thanks**: Open-source contributors of React, Tailwind CSS, Monaco Editor, and OpenAI.
+
+---
+
+<div align="center">
+⭐ Star this repository if you found it useful for your interview prep or engineering capstone!
+</div>
