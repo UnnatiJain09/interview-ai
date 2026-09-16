@@ -1,0 +1,29 @@
+{
+  "name": "interview-ai",
+  "version": "1.0.0",
+  "description": "InterviewAI - AI-Powered Interview Simulator for Engineering & Technical Interview Preparation",
+  "main": "server/server.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "npm start --prefix server",
+    "client": "npm run dev --prefix client",
+    "seed": "npm run seed --prefix server",
+    "install:all": "npm install && npm install --prefix server && npm install --prefix client",
+    "build": "npm run build --prefix client"
+  },
+  "keywords": [
+    "ai-interview",
+    "interview-simulator",
+    "react",
+    "node",
+    "openai",
+    "whisper",
+    "coding-assessment",
+    "monaco-editor"
+  ],
+  "author": "B.Tech IT Project",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
